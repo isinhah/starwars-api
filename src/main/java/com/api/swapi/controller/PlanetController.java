@@ -25,24 +25,30 @@ public class PlanetController {
     }
 
     @GetMapping
-    public List<PlanetResponseDTO> getAllPlanets() {
+    public List<PlanetResponseDTO> getAllPlanetsFromSwapiAPI() {
         String url = "https://swapi.dev/api/planets";
         ResponseEntity<PlanetResponseAPI> response = restTemplate.getForEntity(url, PlanetResponseAPI.class);
         return response.getBody().results();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PlanetResponseDTO> getPlanetById(@PathVariable Long id) {
+    public ResponseEntity<PlanetResponseDTO> getPlanetByIdFromSwapiAPI(@PathVariable Long id) {
         String url = "https://swapi.dev/api/planets/" + id;
         PlanetResponseDTO dto = restTemplate.getForObject(url, PlanetResponseDTO.class);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<PlanetResponseDTO>> searchPlanet(@RequestParam String name) {
+    public ResponseEntity<List<PlanetResponseDTO>> searchPlanetsFromSwapiAPI(@RequestParam String name) {
         String url = "https://swapi.dev/api/planets?search=" + name;
         PlanetResponseAPI response = restTemplate.getForObject(url, PlanetResponseAPI.class);
         return ResponseEntity.ok(response.results());
+    }
+
+    @PostMapping("/populate")
+    public ResponseEntity<String> populatePlanets() {
+        planetService.savePlanetsInDatabase();
+        return ResponseEntity.ok("The planets data have been saved in the database!");
     }
 
     @PostMapping

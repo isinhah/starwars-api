@@ -35,12 +35,10 @@ public class Planet {
     private ZonedDateTime edited;
 
     @ElementCollection
-    @CollectionTable(name = "residents", joinColumns = @JoinColumn(name = "planet_id"))
     @Column(name = "residents_url")
     private List<String> residents = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "films", joinColumns = @JoinColumn(name = "planet_id"))
     @Column(name = "films_url")
     private List<String> films = new ArrayList<>();
 
