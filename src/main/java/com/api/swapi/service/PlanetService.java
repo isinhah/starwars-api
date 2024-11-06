@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,22 +31,30 @@ public class PlanetService {
     @Transactional
     public void savePlanetsInDatabase() {
         String url = "https://swapi.dev/api/planets";
-        ResponseEntity<PlanetResponseAPI> response = restTemplate.getForEntity(url, PlanetResponseAPI.class);
+        List<Planet> allPlanets = new ArrayList<>();
 
-        List<PlanetResponseDTO> planets = response.getBody().results();
-        for (PlanetResponseDTO dto : planets) {
-            Planet planet = Planet.builder()
-                    .id(dto.id())
-                    .name(dto.name())
-                    .terrain(dto.terrain())
-                    .population(dto.population())
-                    .created(ZonedDateTime.now())
-                    .residents(dto.residents())
-                    .films(dto.films())
-                    .build();
+        while (url != null) {
+            ResponseEntity<PlanetResponseAPI> response = restTemplate.getForEntity(url, PlanetResponseAPI.class);
+            PlanetResponseAPI planetResponseAPI = response.getBody();
 
-            planetRepository.save(planet);
+            if (planetResponseAPI != null) {
+                for (PlanetResponseDTO dto : planetResponseAPI.results()) {
+                    Planet planet = Planet.builder()
+                            .id(dto.id())
+                            .name(dto.name())
+                            .terrain(dto.terrain())
+                            .population(dto.population())
+                            .created(ZonedDateTime.now())
+                            .residents(dto.residents())
+                            .films(dto.films())
+                            .build();
+                    allPlanets.add(planet);
+                }
+                url = planetResponseAPI.next();
+            }
         }
+
+        planetRepository.saveAll(allPlanets);
     }
 
     public Page<PlanetResponseDTO> getAllPlanets(Pageable pageable) {
