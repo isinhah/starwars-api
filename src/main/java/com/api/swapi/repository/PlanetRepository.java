@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PlanetRepository extends JpaRepository<Planet, Long> {
-    Page<Planet> findByNameContaining(String name, Pageable pageable);
+    Page<Planet> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }

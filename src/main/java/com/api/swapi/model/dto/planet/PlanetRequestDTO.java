@@ -1,4 +1,4 @@
-package com.api.swapi.model.dto;
+package com.api.swapi.model.dto.planet;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
@@ -13,9 +13,9 @@ public record PlanetRequestDTO(
         String terrain,
         @Min(value = 0, message = "A população não pode ser negativa")
         String population,
-        @Schema(description = "Lista de URLs dos residentes do planeta (formato: http://example.com/residents/1)")
+        @Schema(description = "Lista de URLs dos residentes do planeta (formato: http://swapi.dev/api/residents/1)")
         List<String> residents,
-        @Schema(description = "Lista de URLs dos filmes em que o planeta aparece (formato: http://example.com/films/1)")
+        @Schema(description = "Lista de URLs dos filmes em que o planeta aparece (formato: http://swapi.dev/api/films/1)")
         List<String> films
 ) {
 }

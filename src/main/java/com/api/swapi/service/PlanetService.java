@@ -1,9 +1,9 @@
 package com.api.swapi.service;
 
 import com.api.swapi.model.Planet;
-import com.api.swapi.model.dto.PlanetRequestDTO;
-import com.api.swapi.model.dto.PlanetResponseAPI;
-import com.api.swapi.model.dto.PlanetResponseDTO;
+import com.api.swapi.model.dto.planet.PlanetRequestDTO;
+import com.api.swapi.model.dto.planet.PlanetResponseAPI;
+import com.api.swapi.model.dto.planet.PlanetResponseDTO;
 import com.api.swapi.repository.PlanetRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,30 +30,24 @@ public class PlanetService {
     @Transactional
     public void savePlanetsInDatabase() {
         String url = "https://swapi.dev/api/planets";
-        List<Planet> allPlanets = new ArrayList<>();
 
         while (url != null) {
             ResponseEntity<PlanetResponseAPI> response = restTemplate.getForEntity(url, PlanetResponseAPI.class);
-            PlanetResponseAPI planetResponseAPI = response.getBody();
+            List<PlanetResponseDTO> planets = response.getBody().results();
+            url = response.getBody().next();
 
-            if (planetResponseAPI != null) {
-                for (PlanetResponseDTO dto : planetResponseAPI.results()) {
-                    Planet planet = Planet.builder()
-                            .id(dto.id())
-                            .name(dto.name())
-                            .terrain(dto.terrain())
-                            .population(dto.population())
-                            .created(ZonedDateTime.now())
-                            .residents(dto.residents())
-                            .films(dto.films())
-                            .build();
-                    allPlanets.add(planet);
-                }
-                url = planetResponseAPI.next();
+            for (PlanetResponseDTO dto : planets) {
+                Planet planet = Planet.builder()
+                        .id(dto.id())
+                        .name(dto.name())
+                        .terrain(dto.terrain())
+                        .population(dto.population())
+                        .residents(dto.residents())
+                        .films(dto.films())
+                        .build();
+                planetRepository.save(planet);
             }
         }
-
-        planetRepository.saveAll(allPlanets);
     }
 
     public Page<PlanetResponseDTO> getAllPlanets(Pageable pageable) {
@@ -68,7 +61,7 @@ public class PlanetService {
     }
 
     public Page<PlanetResponseDTO> getAllPlanetsByName(String name, Pageable pageable) {
-        Page<Planet> planets = planetRepository.findByNameContaining(name, pageable);
+        Page<Planet> planets = planetRepository.findByNameContainingIgnoreCase(name, pageable);
         return planets.map(PlanetResponseDTO::new);
     }
 

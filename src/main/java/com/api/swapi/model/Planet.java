@@ -1,6 +1,6 @@
 package com.api.swapi.model;
 
-import com.api.swapi.model.dto.PlanetRequestDTO;
+import com.api.swapi.model.dto.planet.PlanetRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

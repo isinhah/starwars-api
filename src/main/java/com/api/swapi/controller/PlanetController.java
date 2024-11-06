@@ -1,8 +1,8 @@
 package com.api.swapi.controller;
 
-import com.api.swapi.model.dto.PlanetRequestDTO;
-import com.api.swapi.model.dto.PlanetResponseAPI;
-import com.api.swapi.model.dto.PlanetResponseDTO;
+import com.api.swapi.model.dto.planet.PlanetRequestDTO;
+import com.api.swapi.model.dto.planet.PlanetResponseAPI;
+import com.api.swapi.model.dto.planet.PlanetResponseDTO;
 import com.api.swapi.service.PlanetService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

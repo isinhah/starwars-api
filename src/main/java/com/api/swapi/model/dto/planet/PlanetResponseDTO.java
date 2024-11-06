@@ -1,4 +1,4 @@
-package com.api.swapi.model.dto;
+package com.api.swapi.model.dto.planet;
 
 import com.api.swapi.model.Planet;
 
