@@ -4,6 +4,7 @@ import com.api.swapi.model.dto.PlanetRequestDTO;
 import com.api.swapi.model.dto.PlanetResponseAPI;
 import com.api.swapi.model.dto.PlanetResponseDTO;
 import com.api.swapi.service.PlanetService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,21 +25,21 @@ public class PlanetController {
         this.restTemplate = restTemplate;
     }
 
-    @GetMapping
+    @GetMapping("/swapi")
     public List<PlanetResponseDTO> getAllPlanetsFromSwapiAPI() {
         String url = "https://swapi.dev/api/planets";
         ResponseEntity<PlanetResponseAPI> response = restTemplate.getForEntity(url, PlanetResponseAPI.class);
         return response.getBody().results();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/swapi/{id}")
     public ResponseEntity<PlanetResponseDTO> getPlanetByIdFromSwapiAPI(@PathVariable Long id) {
         String url = "https://swapi.dev/api/planets/" + id;
         PlanetResponseDTO dto = restTemplate.getForObject(url, PlanetResponseDTO.class);
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/swapi/search")
     public ResponseEntity<List<PlanetResponseDTO>> searchPlanetsFromSwapiAPI(@RequestParam String name) {
         String url = "https://swapi.dev/api/planets?search=" + name;
         PlanetResponseAPI response = restTemplate.getForObject(url, PlanetResponseAPI.class);
@@ -49,6 +50,22 @@ public class PlanetController {
     public ResponseEntity<String> populatePlanets() {
         planetService.savePlanetsInDatabase();
         return ResponseEntity.ok("The planets data have been saved in the database!");
+    }
+
+    @GetMapping
+    public List<PlanetResponseDTO> getAllPlanets(Pageable pageable) {
+        return planetService.getAllPlanets(pageable).getContent();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PlanetResponseDTO> getPlanetById(@PathVariable Long id) {
+        PlanetResponseDTO dto = planetService.getPlanetById(id);
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/search")
+    public List<PlanetResponseDTO> getAllPlanetsByName(@RequestParam String name, Pageable pageable) {
+        return planetService.getAllPlanetsByName(name, pageable).getContent();
     }
 
     @PostMapping

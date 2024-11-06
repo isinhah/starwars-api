@@ -1,6 +1,5 @@
 package com.api.swapi.service;
 
-import com.api.swapi.exceptions.ConflictException;
 import com.api.swapi.model.Planet;
 import com.api.swapi.model.dto.PlanetRequestDTO;
 import com.api.swapi.model.dto.PlanetResponseAPI;
@@ -8,6 +7,8 @@ import com.api.swapi.model.dto.PlanetResponseDTO;
 import com.api.swapi.repository.PlanetRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -47,12 +48,23 @@ public class PlanetService {
         }
     }
 
+    public Page<PlanetResponseDTO> getAllPlanets(Pageable pageable) {
+        Page<Planet> planets = planetRepository.findAll(pageable);
+        return planets.map(PlanetResponseDTO::new);
+    }
+
+    public PlanetResponseDTO getPlanetById(Long id) {
+        Planet planet = verifyPlanetIdExists(id);
+        return new PlanetResponseDTO(planet);
+    }
+
+    public Page<PlanetResponseDTO> getAllPlanetsByName(String name, Pageable pageable) {
+        Page<Planet> planets = planetRepository.findByNameContaining(name, pageable);
+        return planets.map(PlanetResponseDTO::new);
+    }
+
     @Transactional
     public PlanetResponseDTO createPlanet(PlanetRequestDTO dto) {
-        if (planetRepository.existsByName(dto.name())) {
-            throw new ConflictException("Name already exists");
-        }
-
         Planet planet = Planet.builder()
                 .name(dto.name())
                 .terrain(dto.terrain())
@@ -68,7 +80,7 @@ public class PlanetService {
 
     @Transactional
     public PlanetResponseDTO updatePlanet(Long id, PlanetRequestDTO dto) {
-        Planet planet = planetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Planet not found with this id"));
+        Planet planet = verifyPlanetIdExists(id);
 
         planet.alterPlanet(dto);
 
@@ -78,7 +90,11 @@ public class PlanetService {
 
     @Transactional
     public void deletePlanet(Long id) {
-        planetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Planet not found with this id"));
+        verifyPlanetIdExists(id);
         planetRepository.deleteById(id);
+    }
+
+    private Planet verifyPlanetIdExists(Long id) {
+        return planetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Planet not found with this id"));
     }
 }
