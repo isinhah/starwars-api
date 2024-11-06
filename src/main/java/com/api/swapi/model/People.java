@@ -29,7 +29,7 @@ public class People {
     private ZonedDateTime edited;
 
     @ElementCollection
-    @CollectionTable(name = "films", joinColumns = @JoinColumn(name = "people_id"))
+    @CollectionTable(name = "people_films")
     @Column(name = "films_url")
     private List<String> films = new ArrayList<>();
 

@@ -33,7 +33,7 @@ public class Film {
     private ZonedDateTime edited;
 
     @ElementCollection
-    @CollectionTable(name = "characters", joinColumns = @JoinColumn(name = "film_id"))
+    @CollectionTable(name = "films_characters")
     @Column(name = "characters_url")
     private List<String> characters = new ArrayList<>();
 }
