@@ -1,6 +1,7 @@
 package com.api.swapi.model.dto.film;
 
 import com.api.swapi.model.Film;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -11,7 +12,9 @@ public record FilmResponseDTO(
         String title,
         String director,
         String producer,
+        @JsonProperty("episode_id")
         Long episodeId,
+        @JsonProperty("release_date")
         LocalDate releaseDate,
         ZonedDateTime created,
         ZonedDateTime edited,

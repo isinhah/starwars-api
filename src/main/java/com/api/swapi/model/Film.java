@@ -59,6 +59,9 @@ public class Film {
         if (dto.releaseDate() != null) {
             this.releaseDate = dto.releaseDate();
         }
+        if (dto.characters() != null) {
+            this.characters = dto.characters();
+        }
 
         this.edited = ZonedDateTime.now();
     }

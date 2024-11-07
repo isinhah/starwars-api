@@ -1,7 +1,11 @@
 package com.api.swapi.model;
 
+import com.api.swapi.model.dto.people.PeopleRequestDTO;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +13,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,8 +25,7 @@ public class People {
     private Long id;
 
     private String name;
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private String gender;
     @Column(name = "birth_year")
     private String birthYear;
     private String homeworld;
@@ -33,8 +37,22 @@ public class People {
     @Column(name = "films_url")
     private List<String> films = new ArrayList<>();
 
-    public enum Gender {
-        MALE,
-        FEMALE
+    public void alterPerson(PeopleRequestDTO dto) {
+        if (dto.name() != null) {
+            this.name = dto.name();
+        }
+        if (dto.gender() != null) {
+            this.gender = dto.gender();
+        }
+        if (dto.birthYear() != null) {
+            this.birthYear = dto.birthYear();
+        }
+        if (dto.homeworld() != null) {
+            this.homeworld = dto.homeworld();
+        }
+        if (dto.films() != null) {
+            this.films = dto.films();
+        }
+        this.edited = ZonedDateTime.now();
     }
 }

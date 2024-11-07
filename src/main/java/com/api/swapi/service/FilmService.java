@@ -40,6 +40,7 @@ public class FilmService {
                     .title(dto.title())
                     .director(dto.director())
                     .producer(dto.producer())
+                    .episodeId(dto.episodeId())
                     .releaseDate(dto.releaseDate())
                     .characters(dto.characters())
                     .build();
@@ -68,6 +69,7 @@ public class FilmService {
                 .title(dto.title())
                 .director(dto.director())
                 .producer(dto.producer())
+                .episodeId(dto.episodeId())
                 .releaseDate(dto.releaseDate())
                 .created(ZonedDateTime.now())
                 .characters(dto.characters())
