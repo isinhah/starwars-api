@@ -1,5 +1,6 @@
 package com.api.swapi.controller;
 
+import com.api.swapi.controller.swagger.PlanetControllerDoc;
 import com.api.swapi.model.dto.planet.PlanetRequestDTO;
 import com.api.swapi.model.dto.planet.PlanetResponseDTO;
 import com.api.swapi.service.PlanetService;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/planets")
-public class PlanetController {
+public class PlanetController implements PlanetControllerDoc {
 
     @Autowired
     private PlanetService planetService;

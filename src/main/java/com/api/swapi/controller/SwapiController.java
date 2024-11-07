@@ -1,5 +1,6 @@
 package com.api.swapi.controller;
 
+import com.api.swapi.controller.swagger.SwapiControllerDoc;
 import com.api.swapi.model.dto.film.FilmResponseAPI;
 import com.api.swapi.model.dto.film.FilmResponseDTO;
 import com.api.swapi.model.dto.people.PeopleResponseAPI;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/swapi")
-public class SwapiController {
+public class SwapiController implements SwapiControllerDoc {
 
     @Autowired
     private RestTemplate restTemplate;

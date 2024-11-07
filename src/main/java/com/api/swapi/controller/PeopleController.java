@@ -1,5 +1,6 @@
 package com.api.swapi.controller;
 
+import com.api.swapi.controller.swagger.PeopleControllerDoc;
 import com.api.swapi.model.dto.people.PeopleRequestDTO;
 import com.api.swapi.model.dto.people.PeopleResponseDTO;
 import com.api.swapi.service.PeopleService;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/people")
-public class PeopleController {
+public class PeopleController implements PeopleControllerDoc {
 
     @Autowired
     private PeopleService peopleService;

@@ -1,5 +1,6 @@
 package com.api.swapi.controller;
 
+import com.api.swapi.controller.swagger.FilmControllerDoc;
 import com.api.swapi.model.dto.film.FilmRequestDTO;
 import com.api.swapi.model.dto.film.FilmResponseDTO;
 import com.api.swapi.service.FilmService;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/films")
-public class FilmController {
+public class FilmController implements FilmControllerDoc {
 
     @Autowired
     private FilmService filmService;
