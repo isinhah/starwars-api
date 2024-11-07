@@ -9,7 +9,7 @@ public record PeopleRequestDTO(
         @NotBlank(message = "Nome é obrigatório")
         String name,
         @NotBlank(message = "O gênero é obrigatório")
-        @Pattern(regexp = "male|female|hermaphrodite|n/a", message = "Gênero deve ser 'male', 'female' ou 'n/a'")
+        @Pattern(regexp = "male|female|hermaphrodite|n/a", message = "Gênero deve ser 'male', 'female', 'hermaphrodite' ou 'n/a'")
         String gender,
         String birthYear,
         String homeworld,

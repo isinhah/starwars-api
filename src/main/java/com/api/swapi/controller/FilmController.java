@@ -40,8 +40,8 @@ public class FilmController {
     }
 
     @GetMapping("/swapi/search")
-    public ResponseEntity<List<FilmResponseDTO>> searchFilmsFromSwapiAPI(@RequestParam String name) {
-        String url = "https://swapi.dev/api/films?search=" + name;
+    public ResponseEntity<List<FilmResponseDTO>> searchFilmsFromSwapiAPI(@RequestParam String title) {
+        String url = "https://swapi.dev/api/films?search=" + title;
         FilmResponseAPI response = restTemplate.getForObject(url, FilmResponseAPI.class);
         return ResponseEntity.ok(response.results());
     }
