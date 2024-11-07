@@ -1,15 +1,14 @@
 package com.api.swapi.controller;
 
 import com.api.swapi.model.dto.film.FilmRequestDTO;
-import com.api.swapi.model.dto.film.FilmResponseAPI;
 import com.api.swapi.model.dto.film.FilmResponseDTO;
 import com.api.swapi.service.FilmService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -17,34 +16,8 @@ import java.util.List;
 @RequestMapping("/api/v1/films")
 public class FilmController {
 
-    private final FilmService filmService;
-    private final RestTemplate restTemplate;
-
-    public FilmController(FilmService filmService, RestTemplate restTemplate) {
-        this.filmService = filmService;
-        this.restTemplate = restTemplate;
-    }
-
-    @GetMapping("/swapi")
-    public List<FilmResponseDTO> getAllFilmsFromSwapiAPI() {
-        String url = "https://swapi.dev/api/films";
-        ResponseEntity<FilmResponseAPI> response = restTemplate.getForEntity(url, FilmResponseAPI.class);
-        return response.getBody().results();
-    }
-
-    @GetMapping("/swapi/{id}")
-    public ResponseEntity<FilmResponseDTO> getFilmByIdFromSwapiAPI(@PathVariable Long id) {
-        String url = "https://swapi.dev/api/films/" + id;
-        FilmResponseDTO dto = restTemplate.getForObject(url, FilmResponseDTO.class);
-        return ResponseEntity.ok(dto);
-    }
-
-    @GetMapping("/swapi/search")
-    public ResponseEntity<List<FilmResponseDTO>> searchFilmsFromSwapiAPI(@RequestParam String title) {
-        String url = "https://swapi.dev/api/films?search=" + title;
-        FilmResponseAPI response = restTemplate.getForObject(url, FilmResponseAPI.class);
-        return ResponseEntity.ok(response.results());
-    }
+    @Autowired
+    private FilmService filmService;
 
     @PostMapping("/populate")
     public ResponseEntity<String> populateFilms() {

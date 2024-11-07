@@ -1,15 +1,14 @@
 package com.api.swapi.controller;
 
 import com.api.swapi.model.dto.people.PeopleRequestDTO;
-import com.api.swapi.model.dto.people.PeopleResponseAPI;
 import com.api.swapi.model.dto.people.PeopleResponseDTO;
 import com.api.swapi.service.PeopleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -17,34 +16,8 @@ import java.util.List;
 @RequestMapping("/api/v1/people")
 public class PeopleController {
 
-    private final PeopleService peopleService;
-    private final RestTemplate restTemplate;
-
-    public PeopleController(PeopleService peopleService, RestTemplate restTemplate) {
-        this.peopleService = peopleService;
-        this.restTemplate = restTemplate;
-    }
-
-    @GetMapping("/swapi")
-    public List<PeopleResponseDTO> getAllPeopleFromSwapiAPI() {
-        String url = "https://swapi.dev/api/people";
-        ResponseEntity<PeopleResponseAPI> response = restTemplate.getForEntity(url, PeopleResponseAPI.class);
-        return response.getBody().results();
-    }
-
-    @GetMapping("/swapi/{id}")
-    public ResponseEntity<PeopleResponseDTO> getPeopleByIdFromSwapiAPI(@PathVariable Long id) {
-        String url = "https://swapi.dev/api/people/" + id;
-        PeopleResponseDTO dto = restTemplate.getForObject(url, PeopleResponseDTO.class);
-        return ResponseEntity.ok(dto);
-    }
-
-    @GetMapping("/swapi/search")
-    public ResponseEntity<List<PeopleResponseDTO>> searchPeopleFromSwapiAPI(@RequestParam String name) {
-        String url = "https://swapi.dev/api/people?search=" + name;
-        PeopleResponseAPI response = restTemplate.getForObject(url, PeopleResponseAPI.class);
-        return ResponseEntity.ok(response.results());
-    }
+    @Autowired
+    private PeopleService peopleService;
 
     @PostMapping("/populate")
     public ResponseEntity<String> populatePeople() {

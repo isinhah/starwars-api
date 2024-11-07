@@ -1,15 +1,14 @@
 package com.api.swapi.controller;
 
 import com.api.swapi.model.dto.planet.PlanetRequestDTO;
-import com.api.swapi.model.dto.planet.PlanetResponseAPI;
 import com.api.swapi.model.dto.planet.PlanetResponseDTO;
 import com.api.swapi.service.PlanetService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -17,34 +16,8 @@ import java.util.List;
 @RequestMapping("/api/v1/planets")
 public class PlanetController {
 
-    private final PlanetService planetService;
-    private final RestTemplate restTemplate;
-
-    public PlanetController(PlanetService planetService, RestTemplate restTemplate) {
-        this.planetService = planetService;
-        this.restTemplate = restTemplate;
-    }
-
-    @GetMapping("/swapi")
-    public List<PlanetResponseDTO> getAllPlanetsFromSwapiAPI() {
-        String url = "https://swapi.dev/api/planets";
-        ResponseEntity<PlanetResponseAPI> response = restTemplate.getForEntity(url, PlanetResponseAPI.class);
-        return response.getBody().results();
-    }
-
-    @GetMapping("/swapi/{id}")
-    public ResponseEntity<PlanetResponseDTO> getPlanetByIdFromSwapiAPI(@PathVariable Long id) {
-        String url = "https://swapi.dev/api/planets/" + id;
-        PlanetResponseDTO dto = restTemplate.getForObject(url, PlanetResponseDTO.class);
-        return ResponseEntity.ok(dto);
-    }
-
-    @GetMapping("/swapi/search")
-    public ResponseEntity<List<PlanetResponseDTO>> searchPlanetsFromSwapiAPI(@RequestParam String name) {
-        String url = "https://swapi.dev/api/planets?search=" + name;
-        PlanetResponseAPI response = restTemplate.getForObject(url, PlanetResponseAPI.class);
-        return ResponseEntity.ok(response.results());
-    }
+    @Autowired
+    private PlanetService planetService;
 
     @PostMapping("/populate")
     public ResponseEntity<String> populatePlanets() {
