@@ -23,7 +23,7 @@ public class PeopleController implements PeopleControllerDoc {
     @PostMapping("/populate")
     public ResponseEntity<String> populatePeople() {
         peopleService.savePeopleInDatabase();
-        return ResponseEntity.ok("People's data has been saved in the database!");
+        return ResponseEntity.ok("Characters data has been saved in the database!");
     }
 
     @GetMapping
